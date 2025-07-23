@@ -22,7 +22,12 @@ const registerUser = asyncHandler(async (req,res)=>{
     }
 
     const avatarLocalPath = req.files?.avatar[0]?.path;
-    const coverImagePath = req.files?.coverImage[0]?.path;
+    // const coverImagePath = req.files?.coverImage[0]?.path;
+
+    let coverImagePath;
+    if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage[0].length>0) {
+        coverImagePath  = req.files.coverImage[0].path
+    }
 
     if (!avatarLocalPath) {
         throw new ApiError(400,"Avatar File is Required")
