@@ -47,7 +47,7 @@ const registerUser = asyncHandler(async (req, res) => {
     // const coverImagePath = req.files?.coverImage[0]?.path;
 
     let coverImagePath;
-    if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage[0].length > 0) {
+    if (req.files?.coverImage?.[0]?.path) {
         coverImagePath = req.files.coverImage[0].path
     }
 
@@ -195,7 +195,7 @@ const UpdateAccountDetails = asyncHandler(async (req, res) => {
         throw new ApiError(400, "All fields are REQUIRED")
     }
 
-    const user = User.findByIdAndUpdate(
+    const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
             $set: {
@@ -222,7 +222,7 @@ const UpdateAvatar = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Error While Uploading on Avatar")
     }
 
-    const user = User.findByIdAndUpdate(
+    const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
             $set: {
@@ -236,7 +236,7 @@ const UpdateAvatar = asyncHandler(async (req, res) => {
 })
 
 const UpdateCoverIMG = asyncHandler(async (req, res) => {
-    const coverLocalPath = req.file?.path
+    const coverLocalPath = req.files?.coverImage?.[0]?.path;
 
     if (!coverLocalPath) {
         throw new ApiError(400, "CoverIMG file is MISSING!")
@@ -248,7 +248,7 @@ const UpdateCoverIMG = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Error While Uploading on Avatar")
     }
 
-    const user = User.findByIdAndUpdate(
+    const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
             $set: {

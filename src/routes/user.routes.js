@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { loginUser, logoutUser, RefreshAccessToken, registerUser } from "../controllers/user.controller.js";
+import { loginUser, logoutUser, RefreshAccessToken, registerUser, UpdateCoverIMG } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import verifyJWT from "../middlewares/Auth.middleware.js"
 
@@ -25,5 +25,8 @@ router.route("/login").post(loginUser)
 router.route("/logout").post(verifyJWT, logoutUser)
 
 router.route("/refreshToken").post(RefreshAccessToken)
+
+router.put("/update-cover", upload.fields([{ name: "coverImage", maxCount: 1 }]), UpdateCoverIMG)
+
 
 export default router
