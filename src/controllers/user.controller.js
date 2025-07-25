@@ -80,7 +80,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 const loginUser = asyncHandler(async (req, res) => {
     const { username, email, password } = req.body
-    if (!username || !email) {
+    if (!(username || email)) {
         throw new ApiError(400, "Username or Password is Require")
     }
 
@@ -98,7 +98,7 @@ const loginUser = asyncHandler(async (req, res) => {
         throw new ApiError(401, "Invalid User CRedentials")
     }
 
-    const { accessToken, refreshToken } = await GenerateAccessandRefreshTokens(user._id)
+    const { AccessToken, RefreshToken } = await GenerateAccessandRefreshTokens(user._id)
 
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
 
@@ -107,8 +107,8 @@ const loginUser = asyncHandler(async (req, res) => {
         secure: true
     }
 
-    return res.status(200).cookie("accessToken", accessToken, options).cookie("refreshToken", refreshToken, options).json(new ApiResponse(200, {
-        user: loggedInUser, accessToken, refreshToken
+    return res.status(200).cookie("accessToken", AccessToken, options).cookie("refreshToken", RefreshToken, options).json(new ApiResponse(200, {
+        user: loggedInUser, AccessToken, RefreshToken
     }, "User Logged in Succesfully"
     ))
 })
